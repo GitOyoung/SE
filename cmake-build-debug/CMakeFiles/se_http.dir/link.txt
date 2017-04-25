@@ -1,2 +1,0 @@
-/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc ../lib/libse_http.a  CMakeFiles/se_http.dir/src/network/http/client.cpp.o CMakeFiles/se_http.dir/src/network/http/request.cpp.o CMakeFiles/se_http.dir/src/network/http/response.cpp.o
-/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib ../lib/libse_http.a
