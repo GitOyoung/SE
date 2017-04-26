@@ -12,9 +12,13 @@ link_directories(./lib)
 aux_source_directory(./src/base SE_BASE_FILES)
 aux_source_directory(./src/network/http SE_HTTP_FILES)
 
-add_library(se_base ${SE_BASE_FILES})
+add_library(se_base SHARED ${SE_BASE_FILES})
+add_library(se_base_static STATIC ${SE_BASE_FILES})
+set_target_properties(se_base_static PROPERTIES OUTPUT_NAME "se_base")
 
-add_library(se_http ${SE_HTTP_FILES})
+add_library(se_http SHARED ${SE_HTTP_FILES})
+add_library(se_http_static STATIC ${SE_HTTP_FILES})
+set_target_properties(se_http_static PROPERTIES OUTPUT_NAME "se_http")
 
 target_link_libraries(se_http curl)
 
