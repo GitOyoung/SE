@@ -6,6 +6,8 @@
 #define SE_STD_Int64S_H
 
 #include <string>
+#include <functional>
+#include <se/string.h>
 
 namespace se {
 
@@ -65,12 +67,31 @@ namespace se {
 
         Int &operator>>=(int offset);
 
-        std::string toString() const;
+        Int&operator|=(const Int& value);
+        Int&operator|=(int value);
 
-        std::string type() const;
+        Int operator|(const Int& value);
+        Int operator|(int value);
+
+        Int&operator&=(const Int& value);
+        Int&operator&=(int value);
+
+        Int operator&(const Int& value);
+        Int operator&(int value);
+
+
+
+
+
+        String toString() const;
+
+        String type() const;
 
         bool  odd() const;
         bool  even() const;
+        bool  isPowerOf2() const;
+        Int minPowerOf2() const;
+        Int& loop(std::function<bool ()> cb);
 
     private:
         int rawValue;

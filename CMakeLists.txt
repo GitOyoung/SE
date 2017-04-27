@@ -24,7 +24,7 @@ target_link_libraries(se_http curl)
 
 
 add_executable(se_test main.cpp)
-target_link_libraries(se_test se_http)
+target_link_libraries(se_test se_base se_http)
 
 install(TARGETS se_base se_http LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)

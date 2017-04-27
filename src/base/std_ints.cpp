@@ -124,13 +124,13 @@ namespace  se {
         return *this;
     }
 
-    std::string Int::toString() const {
-        std::ostringstream ss;
-        ss << rawValue;
-        return ss.str();
+    String Int::toString() const {
+        String string;
+        string << rawValue;
+        return  string;
     }
 
-    std::string Int::type() const {
+    String Int::type() const {
         return "se::Int";
     }
 
@@ -140,6 +140,73 @@ namespace  se {
 
     bool Int::even() const {
         return !odd();
+    }
+
+    bool Int::isPowerOf2() const {
+        return (rawValue & -rawValue) == rawValue;
+    }
+
+    Int & Int::loop(std::function<bool ()> cb) {
+        if(cb) {
+            for (int i = 0; i < rawValue; ++i) {
+                if(cb()) break;
+            }
+        }
+        return *this;
+    }
+
+    Int Int::minPowerOf2() const {
+        Int ret(rawValue);
+        if(!ret.isPowerOf2()) {
+            while (!(ret + 1).isPowerOf2()) ret |= ret >> 1;
+            ret += 1;
+        }
+        return ret;
+    }
+
+
+    Int Int::operator&(int value) {
+        Int ret(rawValue);
+        ret &= value;
+        return ret;
+    }
+
+    Int Int::operator&(const Int &value) {
+        Int ret(rawValue);
+        ret &= value;
+        return ret;
+    }
+
+    Int& Int::operator&=(int value) {
+        rawValue &= value;
+        return *this;
+    }
+
+    Int& Int::operator&=(const Int &value) {
+        rawValue &= value.rawValue;
+        return *this;
+    }
+
+    Int Int::operator|(int value) {
+        Int ret(rawValue);
+        ret |= value;
+        return ret;
+    }
+
+    Int Int::operator|(const Int &value) {
+        Int ret(rawValue);
+        ret |= value;
+        return ret;
+    }
+
+    Int& Int::operator|=(int value) {
+        rawValue |= value;
+        return *this;
+    }
+
+    Int& Int::operator|=(const Int &value) {
+        rawValue |= value.rawValue;
+        return *this;
     }
 
     Int64::Int64() : rawValue(0ll) {}
