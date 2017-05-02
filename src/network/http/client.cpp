@@ -67,13 +67,25 @@ namespace se {
                 }
                 curl_easy_setopt(hnd, CURLOPT_URL, url.c_str());
                 curl_easy_setopt(hnd, CURLOPT_HTTPHEADER, headers);
-                curl_easy_setopt(hnd, CURLOPT_POSTFIELDS, body.c_str());
+
 
                 curl_easy_setopt(hnd, CURLOPT_WRITEDATA, (void*)&resp);
                 curl_easy_setopt(hnd, CURLOPT_WRITEFUNCTION, Client::WriteData);
                 curl_easy_setopt(hnd, CURLOPT_FOLLOWLOCATION, 1);
                 curl_easy_setopt(hnd, CURLOPT_VERBOSE, 1);
 
+
+                if(req.header("Content-Type") == "multipart/formdata") {
+
+                    curl_httppost *formpost = nullptr, *lastpost = nullptr;
+                    for(auto&pair : req.formdata()) {
+                        curl_formadd(&formpost, &lastpost, CURLFORM_PTRNAME, pair.first.c_str(), CURLFORM_PTRCONTENTS, pair.second.c_str(),CURLFORM_CONTENTSLENGTH, pair.second.size(), CURLFORM_END);
+                    }
+
+                    curl_easy_setopt(hnd, CURLOPT_HTTPPOST, formpost);
+                } else {
+                    curl_easy_setopt(hnd, CURLOPT_POSTFIELDS, body.c_str());
+                }
 
                 if(curl_easy_perform(hnd) == CURLE_OK) {
                     int statusCode = 0;

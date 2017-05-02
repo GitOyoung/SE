@@ -5,6 +5,7 @@
 #ifndef SE_REQUEST_H
 #define SE_REQUEST_H
 
+#include <map>
 #include <vector>
 #include <string>
 
@@ -24,16 +25,21 @@ namespace se {
                 Request& url(const std::string& u);
 
                 std::vector<std::string> headers() const;
+                std::string header(const std::string& headerName) const;
                 Request& header(const std::string& headerName, const std::string& headerValue);
 
                 std::string body() const;
                 Request& body(const std::string& bd);
 
+                std::map<std::string, std::string> formdata() const;
+                Request& formdata(const std::string& formdataName, const std::string formdataValue);
+
             private:
                 struct
                 {
                     std::string url;
-                    std::vector<std::string> headers;
+                    std::map<std::string, std::string> headers;
+                    std::map<std::string, std::string> formdata;
                     std::string body;
                 } data;
             };

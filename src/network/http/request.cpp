@@ -15,10 +15,12 @@ namespace se {
             }
 
             Request& Request::header(const std::string &headerName, const std::string &headerValue) {
-                std::string header;
-                header.append(headerName + ":" + headerValue);
-                data.headers.push_back(header);
+                data.headers[headerName] = headerValue;
                 return *this;
+            }
+
+            std::string Request::header(const std::string &headerName) const {
+                return data.headers.at(headerName);
             }
 
             Request& Request::url(const std::string &u) {
@@ -36,7 +38,11 @@ namespace se {
             }
 
             std::vector<std::string> Request::headers() const {
-                return data.headers;
+                std::vector<std::string> hs;
+                for(auto& pair: data.headers) {
+                    hs.push_back(pair.first + ":" + pair.second);
+                }
+                return hs;
             }
 
             std::string Request::body() const {
@@ -44,7 +50,14 @@ namespace se {
             }
 
 
+            std::map<std::string, std::string> Request::formdata() const {
+                return data.formdata;
+            }
 
+            Request& Request::formdata(const std::string &formdataName, const std::string formdataValue) {
+                data.formdata[formdataName] = formdataValue;
+                return *this;
+            }
 
         }
     }
