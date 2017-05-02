@@ -4,26 +4,48 @@
 
 #include <se/network/http/request.h>
 
+
+
 namespace se {
     namespace network {
         namespace http {
 
-            Request::Request(const std::string &url): headers(nullptr) {
-                curl = curl_easy_init();
-                curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+            Request::Request(const std::string &url): data() {
+                data.url = url;
             }
 
             Request& Request::header(const std::string &headerName, const std::string &headerValue) {
-
-                std::string header = headerName + ":" + headerValue;
-                curl_slist_append(headers, header.c_str());
+                std::string header;
+                header.append(headerName + ":" + headerValue);
+                data.headers.push_back(header);
                 return *this;
             }
 
-            Request& Request::postData(const std::string &body) {
-                curl_easy_setopt(curl, CURLOPT_POSTFIELDS,  body.c_str());
+            Request& Request::url(const std::string &u) {
+                data.url = u;
                 return *this;
             }
+
+            Request& Request::body(const std::string &bd) {
+                data.body = bd;
+                return *this;
+            }
+
+            std::string Request::url() const {
+                return  data.url;
+            }
+
+            std::vector<std::string> Request::headers() const {
+                return data.headers;
+            }
+
+            std::string Request::body() const {
+                return data.body;
+            }
+
+
+
+
         }
     }
 }

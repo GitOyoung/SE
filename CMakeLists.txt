@@ -20,7 +20,7 @@ add_library(se_http SHARED ${SE_HTTP_FILES})
 add_library(se_http_static STATIC ${SE_HTTP_FILES})
 set_target_properties(se_http_static PROPERTIES OUTPUT_NAME "se_http")
 
-target_link_libraries(se_http curl)
+target_link_libraries(se_http se_base curl)
 
 
 add_executable(se_test main.cpp)

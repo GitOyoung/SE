@@ -24,17 +24,22 @@ namespace se {
                 Response&operator=(const Response& other);
                 Response&operator=(Response&& other);
 
+
+                size_t write(void *buff, size_t size, size_t nmemb);
+
                 std::string body() const;
-                std::map<std::string, std::string> headers() const;
+
 
                 Int statusCode() const;
+                Response& statusCode(const Int& code);
+
+            private:
+                struct {
+                    Int statusCode;
+                    std::map<std::string, std::string> headers;
+                    std::string body;
+                } data;
             };
-
-
-
-
-
-
 
 
         }

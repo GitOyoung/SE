@@ -31,6 +31,7 @@ namespace se {
                 Response response();
 
             protected:
+                static size_t  WriteData(void * buff, size_t  size, size_t nmemb, void* pUser);
                 Response request(const std::string& method, const Request& req);
             private:
                 Response res;
