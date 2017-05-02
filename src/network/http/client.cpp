@@ -65,6 +65,17 @@ namespace se {
                 {
                     headers = curl_slist_append(headers, header.c_str());
                 }
+
+                auto queries = req.queries();
+                if(queries.size() > 0) {
+                    url += url.find_first_of("?", 0) == std::string::npos ? "?":"&";
+                    for(auto query: queries) {
+                        url += query.first + "=" + query.second + "&";
+                    }
+                    if(url.at(url.size() - 1) == '&') {
+                        url = url.substr(0, url.size() - 1);
+                    }
+                }
                 curl_easy_setopt(hnd, CURLOPT_URL, url.c_str());
                 curl_easy_setopt(hnd, CURLOPT_HTTPHEADER, headers);
 
@@ -73,6 +84,7 @@ namespace se {
                 curl_easy_setopt(hnd, CURLOPT_WRITEFUNCTION, Client::WriteData);
                 curl_easy_setopt(hnd, CURLOPT_FOLLOWLOCATION, 1);
                 curl_easy_setopt(hnd, CURLOPT_VERBOSE, 1);
+
 
 
                 if(req.header("Content-Type") == "multipart/formdata") {

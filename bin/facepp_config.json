@@ -1,0 +1,13 @@
+{
+  "apiKey":"78MCSFFqMIN_LoPPB0-K5QadTq2a0ZQb",
+  "apiSecret":"SpowA-Z4s_7_kwtqPlRRoGNZTQ9uyUug",
+  "url": {
+    "detect": "https://api-cn.faceplusplus.com/facepp/v3/detect",
+    "compare": "",
+    "search": "",
+    "add": "",
+    "update": "",
+    "remove": "",
+    "search": ""
+  }
+}

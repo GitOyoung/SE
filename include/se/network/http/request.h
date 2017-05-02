@@ -24,6 +24,10 @@ namespace se {
                 std::string url() const;
                 Request& url(const std::string& u);
 
+                std::string query(const std::string& name);
+                Request& query(const std::string& name, const std::string& value);
+                std::map<std::string, std::string> queries() const ;
+
                 std::vector<std::string> headers() const;
                 std::string header(const std::string& headerName) const;
                 Request& header(const std::string& headerName, const std::string& headerValue);
@@ -38,6 +42,7 @@ namespace se {
                 struct
                 {
                     std::string url;
+                    std::map<std::string, std::string> queries;
                     std::map<std::string, std::string> headers;
                     std::map<std::string, std::string> formdata;
                     std::string body;

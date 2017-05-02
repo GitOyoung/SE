@@ -37,6 +37,19 @@ namespace se {
                 return  data.url;
             }
 
+            std::map<std::string, std::string> Request::queries() const {
+                return data.queries;
+            }
+
+            Request& Request::query(const std::string &name, const std::string &value) {
+                data.queries[name] = value;
+                return *this;
+            }
+
+            std::string Request::query(const std::string &name) {
+                return data.queries[name];
+            }
+
             std::vector<std::string> Request::headers() const {
                 std::vector<std::string> hs;
                 for(auto& pair: data.headers) {
