@@ -19,6 +19,22 @@ namespace se {
             class Request
             {
             public:
+                enum FormType
+                {
+                    FORM_NAME_CONTENT,
+                    FORM_NAME_CONTENT_CONTENTTYPE,
+                    FORM_NAME_FILE_FILENAME,
+                    FORM_NAME_FILE_FILENAME_CONTENTTYPE
+                };
+                typedef struct
+                {
+                    FormType type;
+                    std::string name;
+                    std::string file;
+                    std::string fileName;
+                    std::string content;
+                    std::string contentType;
+                } FormData;
                 Request(const std::string& url);
 
                 std::string url() const;
@@ -35,8 +51,8 @@ namespace se {
                 std::string body() const;
                 Request& body(const std::string& bd);
 
-                std::map<std::string, std::string> formdata() const;
-                Request& formdata(const std::string& formdataName, const std::string formdataValue);
+                std::map<std::string, FormData> formdata() const;
+                Request& formdata(const std::string& formdataName, const FormData& formdataValue);
 
             private:
                 struct
@@ -44,7 +60,7 @@ namespace se {
                     std::string url;
                     std::map<std::string, std::string> queries;
                     std::map<std::string, std::string> headers;
-                    std::map<std::string, std::string> formdata;
+                    std::map<std::string, FormData> formdata;
                     std::string body;
                 } data;
             };

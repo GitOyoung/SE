@@ -63,12 +63,13 @@ namespace se {
             }
 
 
-            std::map<std::string, std::string> Request::formdata() const {
+            std::map<std::string, Request::FormData> Request::formdata() const {
                 return data.formdata;
             }
 
-            Request& Request::formdata(const std::string &formdataName, const std::string formdataValue) {
+            Request& Request::formdata(const std::string &formdataName, const FormData& formdataValue) {
                 data.formdata[formdataName] = formdataValue;
+                data.formdata[formdataName].name = formdataName;
                 return *this;
             }
 

@@ -5,8 +5,6 @@
 #include <se/network/http/client.h>
 #include <se/network/http/request.h>
 
-#include <curl/curl.h>
-
 
 namespace se {
     namespace network {
@@ -91,7 +89,39 @@ namespace se {
 
                     curl_httppost *formpost = nullptr, *lastpost = nullptr;
                     for(auto&pair : req.formdata()) {
-                        curl_formadd(&formpost, &lastpost, CURLFORM_PTRNAME, pair.first.c_str(), CURLFORM_PTRCONTENTS, pair.second.c_str(),CURLFORM_CONTENTSLENGTH, pair.second.size(), CURLFORM_END);
+                        switch (pair.second.type)
+                        {
+                            case Request::FORM_NAME_CONTENT:
+                                curl_formadd(&formpost, &lastpost, CURLFORM_COPYNAME, pair.first.c_str(),
+                                             CURLFORM_COPYCONTENTS, pair.second.content.c_str(),
+                                             CURLFORM_END
+                                );
+                                break;
+                            case Request::FORM_NAME_CONTENT_CONTENTTYPE:
+                                curl_formadd(&formpost, &lastpost, CURLFORM_COPYNAME, pair.first.c_str(),
+                                             CURLFORM_COPYCONTENTS, pair.second.content.c_str(),
+                                             CURLFORM_CONTENTTYPE, pair.second.contentType.c_str(),
+                                             CURLFORM_END
+                                );
+                                break;
+                            case Request::FORM_NAME_FILE_FILENAME :
+                                curl_formadd(&formpost, &lastpost, CURLFORM_COPYNAME, pair.first.c_str(),
+                                             CURLFORM_FILE, pair.second.file.c_str(),
+                                             CURLFORM_FILENAME, pair.second.fileName.c_str(),
+                                             CURLFORM_END
+                                );
+                                break;
+                            case Request::FORM_NAME_FILE_FILENAME_CONTENTTYPE :
+                                curl_formadd(&formpost, &lastpost, CURLFORM_COPYNAME, pair.first.c_str(),
+                                             CURLFORM_FILE, pair.second.file.c_str(),
+                                             CURLFORM_FILENAME, pair.second.fileName.c_str(),
+                                             CURLFORM_CONTENTTYPE, pair.second.contentType.c_str(),
+                                             CURLFORM_END
+                                );
+                                break;
+                        }
+
+
                     }
 
                     curl_easy_setopt(hnd, CURLOPT_HTTPPOST, formpost);
