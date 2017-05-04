@@ -23,6 +23,7 @@ namespace se {
                 {
                     FORM_NAME_CONTENT,
                     FORM_NAME_CONTENT_CONTENTTYPE,
+                    FORM_NAME_FILE,
                     FORM_NAME_FILE_FILENAME,
                     FORM_NAME_FILE_FILENAME_CONTENTTYPE
                 };
@@ -51,13 +52,14 @@ namespace se {
                 std::string body() const;
                 Request& body(const std::string& bd);
 
-                std::map<std::string, FormData> formdata() const;
-                Request& formdata(const std::string& formdataName, const FormData& formdataValue);
+                std::vector<FormData> formdata() const;
+                Request& formdata(const FormData& formdataValue);
 
             private:
                 struct
                 {
                     std::string url;
+                    std::string contentType;
                     std::map<std::string, std::string> queries;
                     std::map<std::string, std::string> headers;
                     std::map<std::string, FormData> formdata;

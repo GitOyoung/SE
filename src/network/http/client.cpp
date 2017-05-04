@@ -82,49 +82,52 @@ namespace se {
                 curl_easy_setopt(hnd, CURLOPT_WRITEFUNCTION, Client::WriteData);
                 curl_easy_setopt(hnd, CURLOPT_FOLLOWLOCATION, 1);
                 curl_easy_setopt(hnd, CURLOPT_VERBOSE, 1);
+                curl_easy_setopt(hnd, CURLOPT_HEADER, 1);
 
 
+                curl_httppost *formpost = nullptr, *lastpost = nullptr;
+                if(req.header("Content-Type") == "multipart/form-data") {
 
-                if(req.header("Content-Type") == "multipart/formdata") {
-
-                    curl_httppost *formpost = nullptr, *lastpost = nullptr;
-                    for(auto&pair : req.formdata()) {
-                        switch (pair.second.type)
-                        {
+                    for(auto& fd: req.formdata()) {
+                        switch (fd.type) {
                             case Request::FORM_NAME_CONTENT:
-                                curl_formadd(&formpost, &lastpost, CURLFORM_COPYNAME, pair.first.c_str(),
-                                             CURLFORM_COPYCONTENTS, pair.second.content.c_str(),
+                                curl_formadd(&formpost, &lastpost, CURLFORM_COPYNAME, fd.name.c_str(),
+                                             CURLFORM_COPYCONTENTS, fd.content.c_str(),
                                              CURLFORM_END
                                 );
                                 break;
                             case Request::FORM_NAME_CONTENT_CONTENTTYPE:
-                                curl_formadd(&formpost, &lastpost, CURLFORM_COPYNAME, pair.first.c_str(),
-                                             CURLFORM_COPYCONTENTS, pair.second.content.c_str(),
-                                             CURLFORM_CONTENTTYPE, pair.second.contentType.c_str(),
+                                curl_formadd(&formpost, &lastpost, CURLFORM_COPYNAME, fd.name.c_str(),
+                                             CURLFORM_COPYCONTENTS, fd.content.c_str(),
+                                             CURLFORM_CONTENTTYPE, fd.contentType.c_str(),
                                              CURLFORM_END
                                 );
                                 break;
-                            case Request::FORM_NAME_FILE_FILENAME :
-                                curl_formadd(&formpost, &lastpost, CURLFORM_COPYNAME, pair.first.c_str(),
-                                             CURLFORM_FILE, pair.second.file.c_str(),
-                                             CURLFORM_FILENAME, pair.second.fileName.c_str(),
+                            case Request::FORM_NAME_FILE:
+                                curl_formadd(&formpost, &lastpost, CURLFORM_COPYNAME, fd.name.c_str(),
+                                             CURLFORM_FILE, fd.file.c_str(),
                                              CURLFORM_END
                                 );
                                 break;
-                            case Request::FORM_NAME_FILE_FILENAME_CONTENTTYPE :
-                                curl_formadd(&formpost, &lastpost, CURLFORM_COPYNAME, pair.first.c_str(),
-                                             CURLFORM_FILE, pair.second.file.c_str(),
-                                             CURLFORM_FILENAME, pair.second.fileName.c_str(),
-                                             CURLFORM_CONTENTTYPE, pair.second.contentType.c_str(),
+                            case Request::FORM_NAME_FILE_FILENAME:
+                                curl_formadd(&formpost, &lastpost, CURLFORM_COPYNAME, fd.name.c_str(),
+                                             CURLFORM_FILE, fd.file.c_str(),
+                                             CURLFORM_FILENAME, fd.fileName.c_str(),
+                                             CURLFORM_END
+                                );
+                                break;
+                            case Request::FORM_NAME_FILE_FILENAME_CONTENTTYPE:
+                                curl_formadd(&formpost, &lastpost, CURLFORM_COPYNAME, fd.name.c_str(),
+                                             CURLFORM_FILE, fd.file.c_str(),
+                                             CURLFORM_FILENAME, fd.fileName.c_str(),
+                                             CURLFORM_CONTENTTYPE, fd.contentType.c_str(),
                                              CURLFORM_END
                                 );
                                 break;
                         }
-
-
                     }
-
                     curl_easy_setopt(hnd, CURLOPT_HTTPPOST, formpost);
+
                 } else {
                     curl_easy_setopt(hnd, CURLOPT_POSTFIELDS, body.c_str());
                 }
@@ -136,7 +139,7 @@ namespace se {
                     }
 
                 }
-
+                if(formpost) curl_formfree(formpost);
                 curl_easy_cleanup(hnd);
 
                 return  resp;

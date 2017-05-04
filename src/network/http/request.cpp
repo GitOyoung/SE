@@ -59,17 +59,20 @@ namespace se {
             }
 
             std::string Request::body() const {
-                return data.body;
+               return data.body;
             }
 
 
-            std::map<std::string, Request::FormData> Request::formdata() const {
-                return data.formdata;
+            std::vector<Request::FormData> Request::formdata() const {
+                std::vector<FormData> formData;
+                for(auto& pair: data.formdata) {
+                    formData.push_back(pair.second);
+                }
+                return formData;
             }
 
-            Request& Request::formdata(const std::string &formdataName, const FormData& formdataValue) {
-                data.formdata[formdataName] = formdataValue;
-                data.formdata[formdataName].name = formdataName;
+            Request& Request::formdata(const FormData& formdataValue) {
+                data.formdata[formdataValue.name] = formdataValue;
                 return *this;
             }
 
