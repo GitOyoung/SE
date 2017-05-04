@@ -11,6 +11,7 @@ link_directories(./lib)
 
 aux_source_directory(./src/base SE_BASE_FILES)
 aux_source_directory(./src/network/http SE_HTTP_FILES)
+aux_source_directory(./src/facepp SE_FACEPP_FILES)
 
 add_library(se_base SHARED ${SE_BASE_FILES})
 add_library(se_base_static STATIC ${SE_BASE_FILES})
@@ -22,11 +23,16 @@ set_target_properties(se_http_static PROPERTIES OUTPUT_NAME "se_http")
 
 target_link_libraries(se_http se_base curl)
 
+add_library(se_facepp SHARED ${SE_FACEPP_FILES})
+add_library(se_facepp_static STATIC ${SE_FACEPP_FILES})
+set_target_properties(se_facepp_static PROPERTIES OUTPU_NAME "se_facepp")
+target_link_libraries(se_facepp se_base se_http jsoncpp)
+
 
 add_executable(se_test main.cpp)
-target_link_libraries(se_test se_base se_http)
+target_link_libraries(se_test se_base se_http se_facepp)
 
-install(TARGETS se_base se_http LIBRARY DESTINATION lib
+install(TARGETS se_base se_http se_facepp LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)
 install(DIRECTORY ./include/se DESTINATION include)
 
