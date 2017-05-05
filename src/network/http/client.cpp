@@ -82,7 +82,7 @@ namespace se {
                 curl_easy_setopt(hnd, CURLOPT_WRITEFUNCTION, Client::WriteData);
                 curl_easy_setopt(hnd, CURLOPT_FOLLOWLOCATION, 1);
                 curl_easy_setopt(hnd, CURLOPT_VERBOSE, 1);
-                curl_easy_setopt(hnd, CURLOPT_HEADER, 1);
+                curl_easy_setopt(hnd, CURLOPT_HEADER, 0);
 
 
                 curl_httppost *formpost = nullptr, *lastpost = nullptr;

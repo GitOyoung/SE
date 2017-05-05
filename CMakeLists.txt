@@ -25,7 +25,7 @@ target_link_libraries(se_http se_base curl)
 
 add_library(se_facepp SHARED ${SE_FACEPP_FILES})
 add_library(se_facepp_static STATIC ${SE_FACEPP_FILES})
-set_target_properties(se_facepp_static PROPERTIES OUTPU_NAME "se_facepp")
+set_target_properties(se_facepp_static PROPERTIES OUTPUT_NAME "se_facepp")
 target_link_libraries(se_facepp se_base se_http jsoncpp)
 
 

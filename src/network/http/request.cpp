@@ -12,6 +12,7 @@ namespace se {
 
             Request::Request(const std::string &url): data() {
                 data.url = url;
+                header("Expect", "");
             }
 
             Request& Request::header(const std::string &headerName, const std::string &headerValue) {
