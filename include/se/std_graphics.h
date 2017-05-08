@@ -7,6 +7,23 @@
 
 namespace se {
     namespace graphics {
+
+//        template <class T, int  degree>
+//        class Point
+//        {
+//        public:
+//            Point() { memset(turple, 0, sizeof(turple));}
+//            T&operator[](int index)
+//            {
+//                return turple[index];
+//            }
+//            T operator[](int index) const {
+//                return turple[index];
+//            }
+//        protected:
+//            T turple[degree];
+//        };
+
         class Point
         {
         public:
@@ -18,10 +35,7 @@ namespace se {
             Point(int x = 0, int y = 0);
 
         private:
-            struct {
-                int x;
-                int y;
-            } data;
+            int turple[2];
 
         };
 
@@ -37,10 +51,7 @@ namespace se {
             PointF(float x = 0, float y = 0);
 
         private:
-            struct {
-                float x;
-                float y;
-            } data;
+            float turple[2];
         };
 
         class Point3D
@@ -57,13 +68,11 @@ namespace se {
             Point3D(int x = 0, int y = 0, int z = 0);
 
         private:
-            struct {
-                int x;
-                int y;
-                int z;
-            } data;
+            int turple[3];
 
         };
+
+
     }
 }
 
