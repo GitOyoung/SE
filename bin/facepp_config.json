@@ -2,12 +2,18 @@
   "apiKey":"78MCSFFqMIN_LoPPB0-K5QadTq2a0ZQb",
   "apiSecret":"SpowA-Z4s_7_kwtqPlRRoGNZTQ9uyUug",
   "url": {
-    "detect": "https://api-cn.faceplusplus.com/facepp/v3/detect",
-    "compare": "",
-    "search": "",
-    "add": "",
-    "update": "",
-    "remove": "",
-    "search": ""
+    "detect":"https://api-cn.faceplusplus.com/facepp/v3/detect",
+    "create":"https://api-cn.faceplusplus.com/facepp/v3/faceset/create",
+    "compare":"https://api-cn.faceplusplus.com/facepp/v3/compare",
+    "search":"https://api-cn.faceplusplus.com/facepp/v3/search",
+    "add":"https://api-cn.faceplusplus.com/facepp/v3/faceset/addface",
+    "update":"https://api-cn.faceplusplus.com/facepp/v3/faceset/update",
+    "remove":"https://api-cn.faceplusplus.com/facepp/v3/faceset/removeface",
+    "detail":"https://api-cn.faceplusplus.com/facepp/v3/faceset/getdetail",
+    "del":"https://api-cn.faceplusplus.com/facepp/v3/faceset/delete",
+    "facesets":"https://api-cn.faceplusplus.com/facepp/v3/faceset/getfacesets",
+    "analyze":"https://api-cn.faceplusplus.com/facepp/v3/face/analyze",
+    "facedetail":"https://api-cn.faceplusplus.com/facepp/v3/face/analyze",
+    "setuserid":"https://api-cn.faceplusplus.com/facepp/v3/face/setuserid"
   }
 }
