@@ -32,7 +32,8 @@ target_link_libraries(se_facepp se_base se_http jsoncpp)
 add_executable(se_test main.cpp)
 target_link_libraries(se_test se_base se_http se_facepp)
 
-install(TARGETS se_base se_http se_facepp LIBRARY DESTINATION lib
+install(TARGETS se_base se_base_static se_http se_http_static se_facepp se_facepp_static
+        LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)
 install(DIRECTORY ./include/se DESTINATION include)
 
