@@ -16,7 +16,7 @@ int main(int argc, char **argv)
     {
         auto faceset = facepp.createFaceSet("faceset_20170505", "test_20170505").faceSet();
         if(faceset.token().empty() && faceset.outerId().empty()) {
-            faceset.reload();
+            faceset.reload("", "test_20170505");
         }
         auto faces = facepp.detect("./timg.jpeg", se::facepp::FacePlusPlus::IMAGE_FILE).faces();
         se::facepp::AddFaceResult result;

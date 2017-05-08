@@ -182,9 +182,9 @@ namespace se {
             Json::Value root;
             Json::Reader reader;
             if(reader.parse(body, root)) {
-                displayName(root["display_name"].asString());
-                token(root["faceset_token"].asString());
-                outerId(root["outer_id"].asString());
+                this->displayName(root["display_name"].asString());
+                this->token(root["faceset_token"].asString());
+                this->outerId(root["outer_id"].asString());
                 
                 return true;
             }
@@ -229,6 +229,7 @@ namespace se {
 
             formData.name = "return_result_count";
             formData.content = se::Int(resultCount).toString().toStdString();
+            req.formdata(formData);
 
             auto body = http.post(req).response().body();
 
