@@ -28,6 +28,10 @@ namespace se {
         return impl ? impl->length() : 0;
     }
 
+    String String::substring(int index, size_t length) const {
+        return String::fromStdString(toStdString().substr(index, length));
+    }
+
     String& String::operator=(const char *string) {
         impl->release();
         impl = new StringImpl(string);
@@ -102,7 +106,7 @@ namespace se {
     }
 
 
-    String& String::append(char c) {
+    String& String::append(const char c) {
         return *this += c;
     }
 
@@ -155,6 +159,51 @@ namespace se {
         return *this += string;
     }
 
+    char& String::operator[](int index) {
+        return (*impl)[index];
+    }
+
+    const char String::operator[](int index) const {
+        return (*impl)[index];
+    }
+
+    bool String::operator==(const String &other)  const {
+        return impl == other.impl || toStdString() == other.toStdString();
+    }
+
+    bool String::operator<(const String &other) const  {
+        return impl != other.impl && toStdString() < other.toStdString();
+    }
+
+    bool String::operator>(const String &other) const  {
+        return impl !=other.impl && toStdString() > other.toStdString();
+    }
+
+
+    bool operator==(const char *left, const String& right) {
+        return right == left;
+    }
+
+    bool operator!=(const char *left, const String& right) {
+        return right != left;
+    }
+
+    bool operator<(const char *left, const String& right) {
+        return right > left;
+    }
+
+    bool  operator>(const char *left, const String& right) {
+        return right < left;
+    }
+
+    bool operator<=(const char *left, const String& right) {
+        return right >= left;
+    }
+
+    bool  operator>=(const char *left, const String& right) {
+        return right <=  left;
+    }
+
     String& String::clear() {
         if(impl) impl->clear();
         return *this;
@@ -162,6 +211,53 @@ namespace se {
 
     String String::fromStdString(const std::string &string) {
         return String(string.c_str());
+    }
+
+    String String::lowercaseString() const {
+        String ret;
+        bool noup;
+        for(int i = 0, len = length(); i < len; ++i) {
+
+            noup = (*this)[i] < 'A' || (*this)[i] > 'Z';
+            ret.append((char) (noup ? (*this)[i] : ((*this)[i] | 32)));
+
+        }
+        return ret;
+    }
+
+    String String::uppercaseString() const {
+        String ret;
+        bool nolower;
+        for(int i = 0, len = length(); i < len; ++i) {
+
+            nolower = (*this)[i] < 'a' || (*this)[i] > 'z';
+            ret.append((char) (nolower ? (*this)[i] : ((*this)[i] - 32)));
+
+        }
+        return ret;
+    }
+
+    size_t String::find(const char *substr, size_t pos) const {
+        std::string string = toStdString();
+        return string.find(substr, pos);
+    }
+
+    int64_t String::number(int base) const {
+        char c;
+        int64_t value = 0;
+        bool af, AF;
+        for(int i = 0, len = length(); i < len; ++i) {
+            c = (*this)[i];
+            af = (c >= 'a' && c <= 'f');
+            AF = (c >= 'A' && c <= 'F');
+            if(base == 16 && ( af || AF)) {
+                value = value * base + (af ? c - 'a' : c - 'A') + 10;
+            } else if(c >= '0' && c < '0' + base){
+                value = value * base + (c - '0');
+            }
+        }
+        return value;
+
     }
 
 } /*-------------namespace se end -------------*/

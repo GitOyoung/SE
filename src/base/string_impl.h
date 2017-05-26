@@ -23,6 +23,9 @@ namespace se {
 
         StringImpl&operator-=(int tail);
 
+        char& operator[](int index);
+        const char operator[](int index) const;
+
         int retain();
         int release();
 

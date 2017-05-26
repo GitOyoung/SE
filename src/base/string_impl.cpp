@@ -91,7 +91,7 @@ namespace se {
     }
 
     int StringImpl::length() const {
-        return 0;
+        return len;
     }
 
     bool StringImpl::empty() const {
@@ -122,5 +122,14 @@ namespace se {
     void StringImpl::clear() {
         len = 0;
         data[len] = '\0';
+    }
+
+    char& StringImpl::operator[](int index) {
+        static char null = '\0';
+        return index < length() ? data[index] : null;
+    }
+
+    const char StringImpl::operator[](int index) const {
+        return (const char) (index < length() ? data[index] : '\0');
     }
 }

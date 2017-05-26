@@ -14,6 +14,9 @@ namespace se {
     class String
     {
     public:
+
+        static const size_t npos = std::string::npos;
+
         String();
         String(const char *string);
         String(const String& other);
@@ -23,7 +26,7 @@ namespace se {
         String& operator=(const char *string);
         String& operator=(const String& string);
 
-        String& append(char c);
+        String& append(const char c);
         String& append(const char *string);
         String& append(const char *data, int length);
         String& append(const String& string);
@@ -45,6 +48,30 @@ namespace se {
         String&operator<<(const char *string);
         String&operator<<(const String& string);
 
+
+        bool operator==(const String& other) const ;
+        bool operator!=(const String& other) const {
+            return !(*this == other);
+        }
+        bool operator<(const String& other) const;
+        bool operator<=(const String& other) const {
+            return !(*this > other);
+        }
+        bool operator>(const String& other) const;
+        bool operator>=(const String& other) const {
+            return !(*this < other);
+        }
+
+        friend bool operator==(const char *left, const String& right);
+        friend bool operator==(const char *left, const String& right);
+        friend bool operator<(const char *left, const String& right);
+        friend bool operator>(const char *left, const String& right);
+        friend bool operator<=(const char *left, const String& right);
+        friend bool operator>=(const char *left, const String& right);
+
+        char& operator[](int index);
+        const char operator[](int index) const;
+
         int length() const;
 
         String left(int length) const {
@@ -53,7 +80,7 @@ namespace se {
         String right(int len) const {
             return substring(length() - len, len);
         }
-        String substring(int index, int length) const;
+        String substring(int index, size_t length = npos) const;
 
         int indexOf(const char *string) const;
         int indexOf(const String& string) const;
@@ -62,6 +89,12 @@ namespace se {
         String& clear();
 
         static String fromStdString(const std::string& string);
+
+        String lowercaseString() const;
+        String uppercaseString() const;
+
+        size_t find(const char * substr, size_t pos = 0) const;
+        int64_t number(int base = 10) const;
 
     private:
         StringImpl *impl;
