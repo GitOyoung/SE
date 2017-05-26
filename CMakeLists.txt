@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5git )
+cmake_minimum_required(VERSION 3.5)
 project(se)
 
 set(EXECUTABLE_OUTPUT_PATH  ${PROJECT_SOURCE_DIR}/bin)
@@ -6,12 +6,13 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 add_compile_options(-std=c++11)
 
-include_directories(./include)
-link_directories(./lib)
+include_directories(${PROJECT_SOURCE_DIR}/include)
+link_directories(${PROJECT_SOURCE_DIR}/lib)
 
-aux_source_directory(./src/base SE_BASE_FILES)
-aux_source_directory(./src/network/http SE_HTTP_FILES)
-aux_source_directory(./src/facepp SE_FACEPP_FILES)
+aux_source_directory(${PROJECT_SOURCE_DIR}/src/base SE_BASE_FILES)
+aux_source_directory(${PROJECT_SOURCE_DIR}/src/network/http SE_HTTP_FILES)
+aux_source_directory(${PROJECT_SOURCE_DIR}/src/network/tcp SE_TCP_FILES)
+aux_source_directory(${PROJECT_SOURCE_DIR}/src/facepp SE_FACEPP_FILES)
 
 add_library(se_base SHARED ${SE_BASE_FILES})
 add_library(se_base_static STATIC ${SE_BASE_FILES})
@@ -29,10 +30,16 @@ set_target_properties(se_facepp_static PROPERTIES OUTPUT_NAME "se_facepp")
 target_link_libraries(se_facepp se_base se_http jsoncpp)
 
 
+add_library(se_tcp SHARED ${SE_TCP_FILES})
+add_library(se_tcp_static STATIC ${SE_TCP_FILES})
+set_target_properties(se_tcp_static PROPERTIES OUTPUT_NAME "se_tcp")
+target_link_libraries(se_tcp se_base)
+
+
 add_executable(se_test main.cpp)
 target_link_libraries(se_test se_base se_http se_facepp)
 
-install(TARGETS se_base se_base_static se_http se_http_static se_facepp se_facepp_static
+install(TARGETS se_base se_base_static se_http se_http_static se_facepp se_facepp_static se_tcp se_tcp_static
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)
 install(DIRECTORY ./include/se DESTINATION include)

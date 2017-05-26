@@ -5,6 +5,8 @@
 #ifndef SE_STRING_H
 #define SE_STRING_H
 
+#include <string>
+
 namespace se {
 
     class StringImpl;
@@ -23,6 +25,7 @@ namespace se {
 
         String& append(char c);
         String& append(const char *string);
+        String& append(const char *data, int length);
         String& append(const String& string);
 
         String& operator+=(char c);
