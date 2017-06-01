@@ -6,13 +6,11 @@
 
 
 //darwin
-#ifdef __DARWIN_UNIX03
-    #include <sys/socket.h>
-    #include <netinet/in.h>
-    #include <arpa/inet.h>
-    #include <sys/errno.h>
-    #include <unistd.h>
-#endif
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <sys/errno.h>
+#include <netinet/in.h>
+#include <unistd.h>
 
 namespace se {
     namespace network {
