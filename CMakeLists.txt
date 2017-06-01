@@ -37,7 +37,7 @@ target_link_libraries(se_tcp se_base)
 
 
 add_executable(se_test main.cpp)
-target_link_libraries(se_test se_base se_http se_facepp)
+target_link_libraries(se_test se_base se_tcp)
 
 install(TARGETS se_base se_base_static se_http se_http_static se_facepp se_facepp_static se_tcp se_tcp_static
         LIBRARY DESTINATION lib

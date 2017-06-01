@@ -11,28 +11,36 @@ namespace se {
     namespace network {
         namespace tcp {
 
-            class SocketImpl;
 
             class Socket {
             public:
-                Socket();
+                typedef int socket_t;
 
-                //client
-                bool  connect(const char *host, unsigned short port);
-                void close();
+                Socket();
+                Socket(const socket_t& s);
+                Socket(const Socket& other);
+
 
                 //server
-                bool listen(unsigned short port);
+                bool listen(const char *host, unsigned short port, int &error = defaultInt, int backlog = 20);
+                Socket accept(String& remoteAddress, unsigned short &remotePort);
+
+
+                //client
+                bool connect(const char *host, unsigned short port, int &error = defaultInt);
 
                 //common
-                int write(const char *data, int length);
-                int write(const String& content);
+                int send(const void *data, int length, int flags = 0);
+                int recv(void *data, int length, unsigned int flags = 0);
+                void close();
+                bool  shutdown(int how, int& error = defaultInt);
 
-                int read(char *data, int length);
+                bool bad() const;
 
             private:
-                SocketImpl *impl;
-
+                static unsigned short defaultUShort;
+                static int defaultInt;
+                socket_t socket;
             };
         }
     }

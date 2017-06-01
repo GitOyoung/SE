@@ -2,36 +2,26 @@
 // Created by 欧阳建华 on 2017/4/25.
 //
 
-
-
-#include <se/facepp/faceplusplus.h>
-#include <se/facepp/faceset.h>
+#include <se/string.h>
+#include <se/network/tcp/socket.h>
+#include <iostream>
 
 int main(int argc, char **argv)
 {
+    se::network::tcp::Socket socket;
+
+    socket.listen("0.0.0.0", 8989);
 
 
-    se::facepp::FacePlusPlus facepp;
-    if(facepp.load("./facepp_config.json"))
-    {
-        auto faceset = facepp.createFaceSet("faceset_20170505", "test_20170505").faceSet();
-        if(faceset.token().empty() && faceset.outerId().empty()) {
-            faceset.reload("", "test_20170505");
-        }
-        auto faces = facepp.detect("./timg.jpeg", se::facepp::FacePlusPlus::IMAGE_FILE).faces();
-        se::facepp::AddFaceResult result;
+    se::String host;
+    unsigned  short port;
 
-        if(!faces.empty()) {
-            std::string faceToken = faces[0].faceToken();
-            for(auto& face: faces) {
-                faceset.add(face.faceToken(), result);
-            }
+    se::network::tcp::Socket acsocket(0);
 
-            faceset.search(faceToken);
-        }
-
+    while(!(acsocket = socket.accept(host, port)).bad()) {
+        std::cout<< host.toStdString() << ":" << port << std::endl;
+        acsocket.send("Hahaha", 6);
     }
-
 
     return 0;
 }
