@@ -5,23 +5,27 @@
 #include <se/network/tcp/server.h>
 #include <future>
 
-namespace se::network::tcp {
+namespace se {
+    namespace network {
+        namespace tcp {
 
-    Server::Server(): localSocket() {}
+            Server::Server() : localSocket() {}
 
 
-    Server& Server::listen(unsigned short port) {
-        localSocket.listen("0.0.0.0", port);
-        String hostName;
-        unsigned short port;
-        Socket accept = localSocket.accept(hostName, port);
-        while(!accept.bad()) {
-            std::async(std::launch::async, [=]() {
-                onConnection(accept, hostName, port);
-            });
+            Server &Server::listen(unsigned short port) {
+                localSocket.listen("0.0.0.0", port);
+                String hostName;
+                unsigned short port;
+                Socket accept = localSocket.accept(hostName, port);
+                while (!accept.bad()) {
+                    std::async(std::launch::async, [=]() {
+                        onConnection(accept, hostName, port);
+                    });
 
-            accept = localSocket.accept(hostName, port);
+                    accept = localSocket.accept(hostName, port);
+                }
+
+            }
         }
-
     }
 }
