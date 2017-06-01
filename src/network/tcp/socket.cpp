@@ -5,11 +5,10 @@
 #include <se/network/tcp/socket.h>
 
 
-//darwin
 #include <arpa/inet.h>
-#include <sys/socket.h>
 #include <sys/errno.h>
-#include <netinet/in.h>
+//#include <netinet/in.h>
+//#include <sys/socket.h>
 #include <unistd.h>
 
 namespace se {
