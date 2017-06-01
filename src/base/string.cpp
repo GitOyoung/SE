@@ -180,29 +180,7 @@ namespace se {
     }
 
 
-    bool operator==(const char *left, const String& right) {
-        return right == left;
-    }
 
-    bool operator!=(const char *left, const String& right) {
-        return right != left;
-    }
-
-    bool operator<(const char *left, const String& right) {
-        return right > left;
-    }
-
-    bool  operator>(const char *left, const String& right) {
-        return right < left;
-    }
-
-    bool operator<=(const char *left, const String& right) {
-        return right >= left;
-    }
-
-    bool  operator>=(const char *left, const String& right) {
-        return right <=  left;
-    }
 
     String& String::clear() {
         if(impl) impl->clear();
@@ -260,4 +238,30 @@ namespace se {
 
     }
 
-} /*-------------namespace se end -------------*/
+}
+
+bool operator==(const char *left, const se::String& right) {
+    return right == left;
+}
+
+bool operator!=(const char *left, const se::String& right) {
+    return right != left;
+}
+
+bool operator<(const char *left, const se::String& right) {
+    return right > left;
+}
+
+bool  operator>(const char *left, const se::String& right) {
+    return right < left;
+}
+
+bool operator<=(const char *left, const se::String& right) {
+    return right >= left;
+}
+
+bool  operator>=(const char *left, const se::String& right) {
+    return right <=  left;
+}
+
+/*-------------namespace se end -------------*/
