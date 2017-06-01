@@ -6,7 +6,6 @@
 
 #include <se/std_ints.h>
 
-
 namespace se {
     StringImpl::StringImpl() : refCount(1), len(0),capacity(1),  data(nullptr){
 

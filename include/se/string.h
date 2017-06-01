@@ -62,12 +62,7 @@ namespace se {
             return !(*this < other);
         }
 
-        friend bool operator==(const char *left, const String& right);
-        friend bool operator==(const char *left, const String& right);
-        friend bool operator<(const char *left, const String& right);
-        friend bool operator>(const char *left, const String& right);
-        friend bool operator<=(const char *left, const String& right);
-        friend bool operator>=(const char *left, const String& right);
+
 
         char& operator[](int index);
         const char operator[](int index) const;
@@ -100,5 +95,12 @@ namespace se {
         StringImpl *impl;
     };
 }
+
+bool operator==(const char *left, const se::String& right);
+bool operator!=(const char *left, const se::String& right);
+bool operator<(const char *left, const se::String& right);
+bool operator>(const char *left, const se::String& right);
+bool operator<=(const char *left, const se::String& right);
+bool operator>=(const char *left, const se::String& right);
 
 #endif //SE_STRING_H
