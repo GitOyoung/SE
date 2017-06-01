@@ -2,10 +2,13 @@
 // Created by 欧阳建华 on 2017/5/26.
 //
 
+<<<<<<< HEAD
+
 
 #include "./string_impl.h"
 #include <se/std_ints.h>
 #include <string.h>
+
 
 namespace se {
     StringImpl::StringImpl() : refCount(1), len(0),capacity(1),  data(nullptr){
