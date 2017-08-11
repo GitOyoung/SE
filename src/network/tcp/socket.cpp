@@ -15,7 +15,7 @@ namespace se {
     namespace network {
         namespace tcp {
 
-            int Socket::defaultInt = 0;
+            int Socket::errorCode = 0;
 
             Socket::Socket() {
                socket = ::socket(AF_INET, SOCK_STREAM, 0);
@@ -25,7 +25,7 @@ namespace se {
 
             Socket::Socket(const Socket &other): socket(other.socket) {}
 
-            bool Socket::listen(const char *host, unsigned short port, int &error, int backlog) {
+            bool Socket::listen(const char *host, unsigned short port, int &error, int backlog) const {
                 sockaddr_in sa;
                 sa.sin_family = AF_INET;
                 sa.sin_addr.s_addr = ::inet_addr(host);
@@ -37,19 +37,18 @@ namespace se {
                 return true;
             }
 
-            Socket Socket::accept(String &remoteAddress, unsigned short &remotePort) {
+            int  Socket::accept(String &remoteAddress, unsigned short &remotePort) const {
                 sockaddr_in sa;
                 socklen_t saLen = sizeof(sa);
                 socket_t newSocket = ::accept(socket, (sockaddr *)&sa, &saLen);
-                if(newSocket < 0) {
-                    return Socket(0);
+                if(newSocket >= 0) {
+                    remoteAddress = ::inet_ntoa(sa.sin_addr);
+                    remotePort = ntohs(sa.sin_port);
                 }
-                remoteAddress = ::inet_ntoa(sa.sin_addr);
-                remotePort = ntohs(sa.sin_port);
-                return Socket(newSocket);
+                return newSocket;
             }
 
-            bool Socket::connect(const char *host, unsigned short port, int &error) {
+            bool Socket::connect(const char *host, unsigned short port, int &error)  const {
                 sockaddr_in sa;
                 sa.sin_family = AF_INET;
                 sa.sin_addr.s_addr = ::inet_addr(host);
@@ -61,22 +60,24 @@ namespace se {
                 return true;
             }
 
-            int Socket::send(const void *data, int length, int flags) {
+            int Socket::send(const void *data, int length, int flags)  const {
                 return (int) ::send(socket, data, length, flags);
             }
 
-            int Socket::recv(void *data, int length, unsigned int flags) {
+            int Socket::recv(void *data, int length, unsigned int flags)  const {
                 return (int) ::recv(socket, data, length, flags);
             }
 
             void Socket::close() {
                 ::close(socket);
+                socket = 0;
             }
             bool Socket::shutdown(int how, int &error) {
                 if(::shutdown(socket, how) < 0 ) {
                     error = errno;
                     return false;
                 }
+                socket = 0;
                 return true;
             }
 

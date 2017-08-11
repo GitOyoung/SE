@@ -13,6 +13,9 @@ namespace se {
 
 
             class Socket {
+
+            public:
+                static int errorCode;
             public:
                 typedef int socket_t;
 
@@ -22,24 +25,22 @@ namespace se {
 
 
                 //server
-                bool listen(const char *host, unsigned short port, int &error = defaultInt, int backlog = 20);
-                Socket accept(String& remoteAddress, unsigned short &remotePort);
+                bool listen(const char *host, unsigned short port, int &error = errorCode, int backlog = 20) const ;
+
+                int accept(String& remoteAddress, unsigned short &remotePort) const ;
 
 
                 //client
-                bool connect(const char *host, unsigned short port, int &error = defaultInt);
+                bool connect(const char *host, unsigned short port, int &error = errorCode) const ;
 
                 //common
-                int send(const void *data, int length, int flags = 0);
-                int recv(void *data, int length, unsigned int flags = 0);
+                int send(const void *data, int length, int flags = 0) const ;
+                int recv(void *data, int length, unsigned int flags = 0) const ;
                 void close();
-                bool  shutdown(int how, int& error = defaultInt);
+                bool  shutdown(int how, int& error = errorCode);
 
                 bool bad() const;
-
             private:
-                static unsigned short defaultUShort;
-                static int defaultInt;
                 socket_t socket;
             };
         }
