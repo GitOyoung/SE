@@ -43,5 +43,12 @@ namespace se {
             }
         }
 
+
+        namespace current {
+            ThreadId threadId() {
+                return std::this_thread::get_id();
+            }
+        }
+
     }
 }

@@ -6,9 +6,11 @@
 #define SE_THREAD_POOL_H
 
 #include <se/thread/thread.h>
-
+#include <se/thread/mutex.h>
+#include <se/thread/condition.h>
 
 #include <vector>
+#include <queue>
 #include <functional>
 
 namespace se {
@@ -23,6 +25,7 @@ namespace se {
         explicit ThreadPool(int max_thread_count = 4);
 
         void push(const Task task);
+        void shutdown();
 
         ~ThreadPool();
     protected:
@@ -32,11 +35,15 @@ namespace se {
         void createNewWorkThread();
 
     private:
+        bool running;
         int maxThreadCount;
         int freeThreadCount;
         int currentThreadCount;
         std::vector<Thread *> threadList;
-        std::vector<Task> taskList;
+        std::queue<Task> taskList;
+
+        Mutex mutex;
+        Condition notEmpty;
     };
 
 

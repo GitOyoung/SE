@@ -10,7 +10,14 @@
 
 namespace se {
     namespace thread {
+
+
         typedef std::thread::id ThreadId;
+
+        namespace current {
+            ThreadId threadId();
+        }
+
 
         class Thread: public Runnable
         {

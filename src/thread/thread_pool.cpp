@@ -4,46 +4,58 @@
 
 
 #include <se/thread/thread_pool.h>
-
+#include <se/thread/locker.h>
 
 namespace se {
     namespace thread {
         ThreadPool::ThreadPool(int max_thread_count)
-                : maxThreadCount(max_thread_count)
+                : running(false)
+                , maxThreadCount(max_thread_count)
                 , freeThreadCount(0)
-                , currentThreadCount(0) {
+                , currentThreadCount(0)
+                , mutex()
+                , notEmpty(mutex) {
 
         }
 
         void ThreadPool::run() {
-
-            while(active) {
+            while(running) {
+                Locker locker(mutex);
                 ++freeThreadCount;
-                // wait();
+                while(taskList.empty()) notEmpty.wait();;
                 --freeThreadCount;
-                if(taskList.empty()) continue;
-
                 auto &task = taskList.front();
-                if(task) task();
+                taskList.pop();
+                if(task) {
+                    task();
+                }
             }
 
         }
 
         void ThreadPool::push(const Task task) {
-            taskList.push_back(task);
+
+            Locker locker(mutex);
+            taskList.push(task);
             if(freeThreadCount == 0 && currentThreadCount < maxThreadCount) {
                 createNewWorkThread();
             }
-            //notify()
+            notEmpty.notifyAll();
         }
 
         void ThreadPool::createNewWorkThread() {
             auto thread = new Thread(this);
             threadList.push_back(thread);
             currentThreadCount = threadList.size();
+            if(!running) running = true;
+        }
+
+        void ThreadPool::shutdown() {
+            running = false;
         }
 
         ThreadPool::~ThreadPool() {
+            shutdown();
             for(auto &thread: threadList) {
                 delete thread;
             }

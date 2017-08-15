@@ -13,6 +13,7 @@ aux_source_directory(${PROJECT_SOURCE_DIR}/src/base SE_BASE_FILES)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src/network/http SE_HTTP_FILES)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src/network/tcp SE_TCP_FILES)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src/facepp SE_FACEPP_FILES)
+aux_source_directory(${PROJECT_SOURCE_DIR}/src/thread SE_THREAD_FILES)
 
 add_library(se_base SHARED ${SE_BASE_FILES})
 add_library(se_base_static STATIC ${SE_BASE_FILES})
@@ -36,10 +37,22 @@ set_target_properties(se_tcp_static PROPERTIES OUTPUT_NAME "se_tcp")
 target_link_libraries(se_tcp se_base)
 
 
-add_executable(se_test main.cpp)
-target_link_libraries(se_test se_base se_tcp)
+add_library(se_thread SHARED ${SE_THREAD_FILES})
+add_library(se_thread_static STATIC ${SE_THREAD_FILES})
+set_target_properties(se_thread_static PROPERTIES OUTPUT_NAME "se_thread")
+target_link_libraries(se_thread pthread)
 
-install(TARGETS se_base se_base_static se_http se_http_static se_facepp se_facepp_static se_tcp se_tcp_static
+
+add_library(se SHARED ${SE_BASE_FILES} ${SE_THREAD_FILES} ${SE_HTTP_FILES} ${SE_FACEPP_FILES} ${SE_TCP_FILES})
+add_library(se_static STATIC ${SE_BASE_FILES} ${SE_THREAD_FILES} ${SE_HTTP_FILES} ${SE_FACEPP_FILES} ${SE_TCP_FILES})
+set_target_properties(se_static PROPERTIES OUTPUT_NAME "se")
+target_link_libraries(se curl jsoncpp pthread)
+
+
+add_executable(se_test main.cpp)
+target_link_libraries(se_test se )
+
+install(TARGETS se_base se_base_static se_http se_http_static se_facepp se_facepp_static se_tcp se_tcp_static se_thread se_thread_static
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)
 install(DIRECTORY ./include/se DESTINATION include)
