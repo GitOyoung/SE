@@ -22,12 +22,14 @@ namespace se {
             while(running) {
                 Locker locker(mutex);
                 ++freeThreadCount;
-                while(taskList.empty()) notEmpty.wait();;
+                while(running && taskList.empty()) notEmpty.wait();;
                 --freeThreadCount;
-                auto &task = taskList.front();
-                taskList.pop();
-                if(task) {
-                    task();
+                if(running) {
+                    auto &task = taskList.front();
+                    taskList.pop();
+                    if (task) {
+                        task();
+                    }
                 }
             }
 
@@ -52,6 +54,7 @@ namespace se {
 
         void ThreadPool::shutdown() {
             running = false;
+            notEmpty.notifyAll();
         }
 
         ThreadPool::~ThreadPool() {

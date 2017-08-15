@@ -3,25 +3,31 @@
 //
 
 
-#include <iostream>
-#include <se/thread/thread.h>
+#include <stdio.h>
+#include <se/thread/dispatch_queue.h>
 
-class Test: public se::thread::Runnable
-{
-public:
-    virtual void run() {
-        std::cout<< "子线程"<< std::endl;
-    }
-};
+
+
+
 
 int main(int argc, char **argv)
 {
 
-    Test test;
+    auto &mainQueue = se::thread::DispatchQueue::main;
+    auto &globalQueue = se::thread::DispatchQueue::global;
 
-    se::thread::Thread thread(&test);
+    using se::thread::Dispatcher;
 
-    thread.join();
+    Dispatcher::async(globalQueue, [&]() {
+        Dispatcher::async(mainQueue, [&](){
+            printf("run in main0 thread: %ld\n", se::thread::current::threadId());
+            Dispatcher::shutdown(mainQueue);
+        });
+        printf("run in other thread: %ld\n", se::thread::current::threadId());
+    });
+
+    printf("run in main thread: %ld\n", se::thread::current::threadId());
+    mainQueue.run();
 
     return 0;
 }
