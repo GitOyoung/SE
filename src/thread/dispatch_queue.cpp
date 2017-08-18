@@ -3,10 +3,9 @@
 //
 
 #include <se/thread/dispatch_queue.h>
-#include <se/thread/thread.h>
-#include <se/thread/mutex.h>
 #include <se/thread/locker.h>
-#include <se/thread/condition.h>
+
+#include <stdio.h>
 
 namespace se {
     namespace thread {
@@ -25,7 +24,17 @@ namespace se {
 
         void DispatchQueue::run() {
             running = true;
-            while (running) {
+            dispatch();
+        }
+
+        void DispatchQueue::dispatch() {
+            while(running) {
+                schedule();
+            }
+        }
+
+        void DispatchQueue::scheduleAll() {
+            while(!taskQueue.empty()) {
                 schedule();
             }
         }
@@ -36,11 +45,13 @@ namespace se {
 
         void DispatchQueue::schedule() {
             if(!taskQueue.empty()) {
+                printf("schedule task\n");
                 if(pthread) {
                     pool.push(taskQueue.front());
                     taskQueue.pop();
                 } else {
                     taskQueue.front()();
+                    taskQueue.pop();
                 }
             }
 
@@ -48,12 +59,15 @@ namespace se {
 
         void DispatchQueue::push(const DispatchTask &task) {
             if(task) {
+                printf("push task\n");
                 taskQueue.push(task);
             }
             if(pthread == nullptr && needNewThread) {
                 pthread = new Thread(this);
             }
         }
+
+
 
         DispatchQueue::~DispatchQueue() {
             shutdown();

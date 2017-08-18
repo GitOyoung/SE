@@ -44,11 +44,24 @@ namespace se {
         }
 
 
-        namespace current {
-            ThreadId threadId() {
-                return std::this_thread::get_id();
+        ThreadId current::threadId() {
+            return std::this_thread::get_id();
+        }
+
+        void current::sleep(int seconds, int milliseconds, int microseconds) {
+            if(seconds > 0) {
+                std::this_thread::sleep_for(std::chrono::seconds(seconds));
+            }
+
+            if(milliseconds > 0) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+            }
+
+            if(microseconds > 0) {
+                std::this_thread::sleep_for(std::chrono::microseconds(microseconds));
             }
         }
+
 
     }
 }

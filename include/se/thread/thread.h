@@ -14,9 +14,11 @@ namespace se {
 
         typedef std::thread::id ThreadId;
 
-        namespace current {
-            ThreadId threadId();
-        }
+        class current {
+        public:
+            static ThreadId threadId();
+            static void sleep(int seconds, int miliseconds = 0, int microseconds = 0);
+        };
 
 
         class Thread: public Runnable

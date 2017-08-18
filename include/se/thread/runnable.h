@@ -14,6 +14,7 @@ namespace se {
 
         public:
             virtual void run() = 0;
+            ~Runnable(){}
         };
     }
 }

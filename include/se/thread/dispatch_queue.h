@@ -27,9 +27,12 @@ namespace se {
 
         public:
 
-            void schedule(); //if runloop in main, use this
+            void dispatch();
+            void scheduleAll();
+            //if runloop in main, use this
             virtual void run(); //if no runloop in main, use this
         private:
+            void schedule();
             void shutdown();
             void push(const DispatchTask& task);
         private:
