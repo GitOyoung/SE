@@ -32,8 +32,9 @@ namespace se {
     typedef std::function<void()> DeferClosure;
     typedef std::queue<DeferClosure> DeferClosureQueue;
     class Defer {
+    public:
         Defer();
-        DeferClosure& exec(const DeferClosure& deferClosure);
+        Defer& exec(const DeferClosure& deferClosure);
         ~Defer();
     private:
         DeferClosureQueue closureQueue;

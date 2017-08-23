@@ -8,7 +8,7 @@
 namespace se {
     Defer::Defer() {}
 
-    DeferClosure& Defer::exec(const DeferClosure &deferClosure) {
+    Defer& Defer::exec(const DeferClosure &deferClosure) {
         closureQueue.push(deferClosure);
         return *this;
     }
