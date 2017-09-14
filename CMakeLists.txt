@@ -52,7 +52,7 @@ target_link_libraries(se curl jsoncpp pthread)
 add_executable(se_test main.cpp)
 target_link_libraries(se_test se )
 
-install(TARGETS se_base se_base_static se_http se_http_static se_facepp se_facepp_static se_tcp se_tcp_static se_thread se_thread_static
+install(TARGETS se se_base se_base_static se_http se_http_static se_facepp se_facepp_static se_tcp se_tcp_static se_thread se_thread_static
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)
 install(DIRECTORY ./include/se DESTINATION include)
