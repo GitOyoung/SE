@@ -60,6 +60,7 @@ namespace se {
         ThreadPool::~ThreadPool() {
             shutdown();
             for(auto &thread: threadList) {
+                thread->join();
                 delete thread;
             }
         }
