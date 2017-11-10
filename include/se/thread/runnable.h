@@ -11,10 +11,9 @@ namespace se {
 
 
         class Runnable {
-
         public:
             virtual void run() = 0;
-            ~Runnable(){}
+            virtual ~Runnable(){}
         };
     }
 }

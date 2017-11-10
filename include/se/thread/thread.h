@@ -5,37 +5,68 @@
 #ifndef SE_THREAD_H
 #define SE_THREAD_H
 
+#include <se/noncopyable.h>
 #include <se/thread/runnable.h>
-#include <thread>
+#include <se/time/duration.h>
+
+#include <pthread.h>
 
 namespace se {
     namespace thread {
 
-
-        typedef std::thread::id ThreadId;
-
-        class current {
+        class Thread: public Noncopybale,
+                      public Runnable {
         public:
-            static ThreadId threadId();
-            static void sleep(int seconds, int miliseconds = 0, int microseconds = 0);
-        };
+            typedef enum {
+                AS_System,
+                AS_Process
+            }  AttrScope;
 
+            typedef enum   {
+                ADS_Detach,
+                ADS_Joinable
+            } AttrDetachState;
 
-        class Thread: public Runnable
-        {
-        public:
-            explicit Thread(Runnable * func = nullptr);
-            void join();
-            bool joinable() const;
-            void detach();
-            ThreadId getId() const;
+            typedef struct threadId {
+                pthread_t pid;
+            } Id;
+
+            typedef struct threadAttrs {
+                pthread_attr_t pattr;
+            } Attrs;
+
+            Thread();
+
+            Thread(Runnable *r);
 
             ~Thread();
+
+            void start();
+            void cancel();
+            void join();
+            void detach();
+            void kill(int signal);
+            void setThreadAttrDetachState(AttrDetachState state);
+            void setThreadAttrScope(AttrScope scope);
+
+            static void sleep(const se::time::Duration& duration);
+            static void exit(void *pdata);
+            static Id current();
         protected:
-            virtual void run();
+            void run() {}
+
         private:
+            void createThread();
+
+            void initAttr();
+
+        private:
+            bool valid;
             Runnable *runnable;
-            std::thread thread;
+            Id id;
+            Attrs attrs;
+            static void *threadFunc(void *pdata);
+
         };
 
     } // namespace thread end
